@@ -6,8 +6,8 @@ async function main() {
   await prisma.category.createMany({
     data: [{ name: 'Pantry' }, { name: 'Electronics' }, { name: 'Bathroom' }]
   });
-}
 
+  
 await prisma.inventory.createMany({
   data: [
     {
@@ -55,9 +55,15 @@ await prisma.inventory.createMany({
     }
   ]
 });
+}
 
+// Wrap top-level call
 main()
-  .catch((e) => console.error(e))
-  .finally(async () => {
-    await prisma.$disconnect();
+  .then(() => {
+    console.log('Seeding complete 🚀');
+    return prisma.$disconnect();
   })
+  .catch((e) => {
+    console.error(e);
+    return prisma.$disconnect();
+  });
